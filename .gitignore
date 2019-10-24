@@ -5,6 +5,10 @@ __pycache__/
 
 data/*
 Assign2_Sent_Rep.pdf
+*.pdf
+
+glove.6B.zip
+glove.6B
 
 .idea/*
 

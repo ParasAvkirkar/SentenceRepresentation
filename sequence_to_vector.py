@@ -78,6 +78,8 @@ class DanSequenceToVector(SequenceToVector):
         super(DanSequenceToVector, self).__init__(input_dim)
         # TODO(students): start
         # ...
+
+
         # TODO(students): end
 
     def call(self,
