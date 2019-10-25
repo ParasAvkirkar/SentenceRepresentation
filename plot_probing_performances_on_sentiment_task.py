@@ -43,6 +43,15 @@ if __name__ == '__main__':
                                 f"predictions_imdb_sentiment_5k_test.txt")
             predictions_present = os.path.exists(predictions_file)
 
+            # training_command = (f"python train.py probing "
+            #                     f"data/imdb_sentiment_train_5k.jsonl "
+            #                     f"data/imdb_sentiment_dev.jsonl "
+            #                     f"--base-model-dir serialization_dirs/main_{seq2vec_name}_5k_with_emb "
+            #                     f"--layer-num {layer} "
+            #                     f"--num-epochs {epochs} "
+            #                     f"--suffix-name _sentiment_{seq2vec_name}_with_emb_on_5k_at_layer_{layer}")
+            # training_commands.append(training_command)
+
             if not model_files_present:
                 training_command = (f"python train.py probing "
                                     f"data/imdb_sentiment_train_5k.jsonl "
@@ -53,6 +62,13 @@ if __name__ == '__main__':
                                     f"--suffix-name _sentiment_{seq2vec_name}_with_emb_on_5k_at_layer_{layer}")
                 training_commands.append(training_command)
                 continue
+
+            # predict_command = (f"python predict.py "
+            #                    f"serialization_dirs/probing_sentiment_{seq2vec_name}_with_emb_on_5k_at_layer_{layer} "
+            #                    f"data/imdb_sentiment_test.jsonl "
+            #                    f"--predictions-file serialization_dirs/probing_sentiment_{seq2vec_name}_with_emb_on_5k_at_layer_{layer}/"
+            #                    f"predictions_imdb_sentiment_5k_test.txt")
+            # predict_commands.append(predict_command)
 
             if not predictions_present:
                 predict_command = (f"python predict.py "

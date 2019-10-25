@@ -96,10 +96,10 @@ class DanSequenceToVector(SequenceToVector):
         batch_size = vector_sequence.shape[0]
         max_token_size = vector_sequence.shape[1]
         final_mask = sequence_mask
-        if training:
-            drop_out_mask = tf.random.uniform([batch_size, max_token_size])
-            drop_out_mask = tf.where(drop_out_mask < 0.2, 0.0, 1.0)
-            final_mask = tf.multiply(drop_out_mask, sequence_mask)
+        # if training:
+        #     drop_out_mask = tf.random.uniform([batch_size, max_token_size])
+        #     drop_out_mask = tf.where(drop_out_mask < 0.2, 0.0, 1.0)
+        #     final_mask = tf.multiply(drop_out_mask, sequence_mask)
 
         # print(str(sequence_mask.shape))
         # print("final mask shape " + str(final_mask.shape))
@@ -164,11 +164,11 @@ class GruSequenceToVector(SequenceToVector):
 
         prev_output = vector_sequence
         layer_representations = []
-        print("vector_seq " + str(prev_output.shape))
+        # print("vector_seq " + str(prev_output.shape))
         for i in range(len(self.gru_encoders)):
             prev_output, last_state = self.gru_encoders[i](prev_output, mask=sequence_mask)
             layer_representations.append(last_state)
-            print("prev_output " + str(prev_output.shape) + " last state " + str(last_state.shape))
+            # print("prev_output " + str(prev_output.shape) + " last state " + str(last_state.shape))
 
         # TODO(students): end
         return {"combined_vector": last_state,

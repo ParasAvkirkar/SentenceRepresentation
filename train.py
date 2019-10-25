@@ -166,8 +166,8 @@ if __name__ == '__main__':
             raise Exception("To train main model, either pass load-serialization-dir "
                             "or pass seq2vec-choice, embedding-dim and num-layers")
     elif args.model_name == "probing":
-        configs_passed = args.base_model_dir and args.layer_num
-        if not args.load_serialization_dir and not args.layer_num:
+        configs_passed = args.base_model_dir and args.layer_num != None
+        if not args.load_serialization_dir and args.layer_num == None:
             raise Exception("To train probing model, either pass load-serialization-dir "
                             "or pass layer-num and base-model-dir")
 

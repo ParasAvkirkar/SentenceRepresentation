@@ -58,7 +58,7 @@ class ProbingClassifier(models.Model):
         # TODO(students): start
         # ...
         layer_representations = self._pretrained_model(inputs)['layer_representations']
-        layer_representation = layer_representations[:, self._layer_num, :]
+        layer_representation = layer_representations[:, self._layer_num-1, :]
         # print("shape " + str(layer_representations.shape))
         # self.dense_layer()
 

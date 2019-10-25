@@ -1,20 +1,37 @@
-
+Dan
 python train.py main data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --seq2vec-choice dan --embedding-dim 50 --num-layers 4 --num-epochs 5 --suffix-name _dan_5k_with_emb --pretrained-embedding-file data/glove.6B.50d.txt
+python train.py main data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --seq2vec-choice dan --embedding-dim 50 --num-layers 4 --num-epochs 8 --suffix-name _dan_5k_with_emb --pretrained-embedding-file data/glove.6B.50d.txt
+python train.py main data/imdb_sentiment_train_10k.jsonl data/imdb_sentiment_dev.jsonl --seq2vec-choice dan --embedding-dim 50 --num-layers 4 --num-epochs 8 --suffix-name _dan_10k_with_emb --pretrained-embedding-file data/glove.6B.50d.txt
+python train.py main data/imdb_sentiment_train_15k.jsonl data/imdb_sentiment_dev.jsonl --seq2vec-choice dan --embedding-dim 50 --num-layers 4 --num-epochs 8 --suffix-name _dan_15k_with_emb --pretrained-embedding-file data/glove.6B.50d.txt
 
 python predict.py serialization_dirs/main_dan_5k_with_emb data/imdb_sentiment_test.jsonl --predictions-file my_predictions.txt
 
 python evaluate.py data/imdb_sentiment_test.jsonl my_predictions.txt
 
-
-python train.py main data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --seq2vec-choice gru --embedding-dim 50 --num-layers 4 --num-epochs 5 --suffix-name _gru_5k_with_emb --pretrained-embedding-file data/glove.6B.50d.txt
+Gru
+python train.py main data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --seq2vec-choice gru --embedding-dim 50 --num-layers 4 --num-epochs 4 --suffix-name _gru_5k_with_emb --pretrained-embedding-file data/glove.6B.50d.txt
+python train.py main data/imdb_sentiment_train_10k.jsonl data/imdb_sentiment_dev.jsonl --seq2vec-choice gru --embedding-dim 50 --num-layers 4 --num-epochs 4 --suffix-name _gru_10k_with_emb --pretrained-embedding-file data/glove.6B.50d.txt
 
 python predict.py serialization_dirs/main_gru_5k_with_emb data/imdb_sentiment_test.jsonl --predictions-file gru_my_predictions.txt
 
 python evaluate.py data/imdb_sentiment_test.jsonl gru_my_predictions.txt
 
 
-
+Dan probing commands
 probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_dan_5k_with_emb --num-epochs 5 --layer-num 3
+probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_dan_5k_with_emb --num-epochs 5 --layer-num 3 --suffix-name _probdan_5k_emb_layer3
 
-
+probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_gru_5k_with_emb --num-epochs 5 --layer-num 3 --suffix-name _probgru_5k_emb_layer3
 probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_gru_5k_with_emb --num-epochs 5 --layer-num 3
+
+
+
+Probing task
+python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_dan_5k_with_emb --layer-num 1 --num-epochs 8 --suffix-name _sentiment_dan_with_emb_on_5k_at_layer_1
+python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_dan_5k_with_emb --layer-num 2 --num-epochs 8 --suffix-name _sentiment_dan_with_emb_on_5k_at_layer_2
+python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_dan_5k_with_emb --layer-num 3 --num-epochs 8 --suffix-name _sentiment_dan_with_emb_on_5k_at_layer_3
+python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_dan_5k_with_emb --layer-num 4 --num-epochs 8 --suffix-name _sentiment_dan_with_emb_on_5k_at_layer_4
+python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_gru_5k_with_emb --layer-num 1 --num-epochs 4 --suffix-name _sentiment_gru_with_emb_on_5k_at_layer_1
+python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_gru_5k_with_emb --layer-num 2 --num-epochs 4 --suffix-name _sentiment_gru_with_emb_on_5k_at_layer_2
+python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_gru_5k_with_emb --layer-num 3 --num-epochs 4 --suffix-name _sentiment_gru_with_emb_on_5k_at_layer_3
+python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_gru_5k_with_emb --layer-num 4 --num-epochs 4 --suffix-name _sentiment_gru_with_emb_on_5k_at_layer_4

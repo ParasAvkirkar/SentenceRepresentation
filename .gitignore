@@ -11,6 +11,7 @@ glove.6B.zip
 glove.6B
 
 .idea/*
+*.docx
 
 # C extensions
 *.so
