@@ -99,7 +99,7 @@ def load_vocabulary(vocabulary_path: str) -> Tuple[Dict[str, int], Dict[int, str
     """
     vocab_id_to_token = {}
     vocab_token_to_id = {}
-    with open(vocabulary_path, "r") as file:
+    with open(vocabulary_path, "r", encoding='utf8') as file:
         for index, token in enumerate(file):
             token = token.strip()
             if not token:

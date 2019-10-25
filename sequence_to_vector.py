@@ -4,6 +4,7 @@ from typing import Dict
 # external libs
 import tensorflow as tf
 from tensorflow.keras import layers, models
+from tensorflow.keras.layers import GRU
 
 
 class SequenceToVector(models.Model):
@@ -146,6 +147,11 @@ class GruSequenceToVector(SequenceToVector):
         super(GruSequenceToVector, self).__init__(input_dim)
         # TODO(students): start
         # ...
+
+        self.gru_encoders = []
+        for i in range(num_layers):
+            self.gru_encoders.append(GRU(input_dim, return_sequences=True, return_state=True))
+
         # TODO(students): end
 
     def call(self,
@@ -154,6 +160,21 @@ class GruSequenceToVector(SequenceToVector):
              training=False) -> tf.Tensor:
         # TODO(students): start
         # ...
+
+        batch_size = vector_sequence.shape[0]
+        max_token_size = vector_sequence.shape[1]
+
+        prev_output = vector_sequence
+        layer_representations = None
+        print("vector_seq " + str(prev_output.shape))
+        for i in range(len(self.gru_encoders)):
+            prev_output, last_state = self.gru_encoders[i](prev_output, mask=sequence_mask)
+            if i == 0:
+                layer_representations = last_state
+            else:
+                layer_representations = tf.concat([layer_representations, last_state], 0)
+            print("prev_output " + str(prev_output.shape) + " last state " + str(last_state.shape))
+
         # TODO(students): end
-        return {"combined_vector": combined_vector,
+        return {"combined_vector": last_state,
                 "layer_representations": layer_representations}
