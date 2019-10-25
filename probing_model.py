@@ -34,6 +34,9 @@ class ProbingClassifier(models.Model):
 
         # TODO(students): start
         # ...
+
+        self.dense_layer = layers.Dense(classes_num)
+
         # TODO(students): end
 
     def call(self, inputs: tf.Tensor, training: bool =False) -> tf.Tensor:
@@ -54,5 +57,10 @@ class ProbingClassifier(models.Model):
         """
         # TODO(students): start
         # ...
+        layer_representations = self._pretrained_model(inputs)['layer_representations']
+        layer_representation = layer_representations[:, self._layer_num, :]
+        # print("shape " + str(layer_representations.shape))
+        # self.dense_layer()
+
         # TODO(students): end
-        return {"logits": logits}
+        return {"logits": self.dense_layer(layer_representation)}

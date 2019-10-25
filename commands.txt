@@ -8,6 +8,13 @@ python evaluate.py data/imdb_sentiment_test.jsonl my_predictions.txt
 
 python train.py main data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --seq2vec-choice gru --embedding-dim 50 --num-layers 4 --num-epochs 5 --suffix-name _gru_5k_with_emb --pretrained-embedding-file data/glove.6B.50d.txt
 
-python predict.py serialization_dirs/main_dan_5k_with_emb data/imdb_sentiment_test.jsonl --predictions-file my_predictions.txt
+python predict.py serialization_dirs/main_gru_5k_with_emb data/imdb_sentiment_test.jsonl --predictions-file gru_my_predictions.txt
 
-python evaluate.py data/imdb_sentiment_test.jsonl my_predictions.txt
+python evaluate.py data/imdb_sentiment_test.jsonl gru_my_predictions.txt
+
+
+
+probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_dan_5k_with_emb --num-epochs 5 --layer-num 3
+
+
+probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_gru_5k_with_emb --num-epochs 5 --layer-num 3

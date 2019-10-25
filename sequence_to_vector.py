@@ -114,19 +114,17 @@ class DanSequenceToVector(SequenceToVector):
 
         # print(str("combined vector shape ") + str(combined_vector.shape))
 
-        layer_representations = None
+        layer_representations = []
         prev_output = combined_vector
         for i in range(len(self.dense_layers_list)):
             representation = self.dense_layers_list[i](prev_output)
             prev_output = representation
-            if i == 0:
-                layer_representations = representation
-            else:
-                layer_representations = tf.concat([layer_representations, representation], 0)
+            layer_representations.append(prev_output)
+
 
         # TODO(students): end
         return {"combined_vector": prev_output,
-                "layer_representations": layer_representations}
+                "layer_representations": tf.stack(layer_representations, axis=1)}
 
 
 class GruSequenceToVector(SequenceToVector):
@@ -165,16 +163,13 @@ class GruSequenceToVector(SequenceToVector):
         max_token_size = vector_sequence.shape[1]
 
         prev_output = vector_sequence
-        layer_representations = None
+        layer_representations = []
         print("vector_seq " + str(prev_output.shape))
         for i in range(len(self.gru_encoders)):
             prev_output, last_state = self.gru_encoders[i](prev_output, mask=sequence_mask)
-            if i == 0:
-                layer_representations = last_state
-            else:
-                layer_representations = tf.concat([layer_representations, last_state], 0)
+            layer_representations.append(last_state)
             print("prev_output " + str(prev_output.shape) + " last state " + str(last_state.shape))
 
         # TODO(students): end
         return {"combined_vector": last_state,
-                "layer_representations": layer_representations}
+                "layer_representations": tf.stack(layer_representations, axis=1)}
