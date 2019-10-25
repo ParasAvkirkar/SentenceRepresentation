@@ -198,7 +198,7 @@ if __name__ == '__main__':
         classifier = load_pretrained_model(args.load_serialization_dir)
     else:
         # Build Vocabulary
-        with open(GLOVE_COMMON_WORDS_PATH) as file:
+        with open(GLOVE_COMMON_WORDS_PATH, encoding='utf8') as file:
             glove_common_words = [line.strip() for line in file.readlines() if line.strip()]
         vocab_token_to_id, vocab_id_to_token = build_vocabulary(train_instances, VOCAB_SIZE,
                                                                 glove_common_words)

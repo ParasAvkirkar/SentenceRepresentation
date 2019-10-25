@@ -28,7 +28,7 @@ def read_instances(data_file_path: str,
         Maximum number of tokens allowed in the classification instance.
     """
     instances = []
-    with open(data_file_path) as file:
+    with open(data_file_path, encoding='utf8') as file:
         for line in tqdm(file.readlines()):
             instance = json.loads(line.strip())
             text = instance["text"]
@@ -88,7 +88,7 @@ def save_vocabulary(vocab_id_to_token: Dict[int, str], vocabulary_path: str) -> 
     """
     Saves vocabulary to vocabulary_path.
     """
-    with open(vocabulary_path, "w") as file:
+    with open(vocabulary_path, "w", encoding='utf8') as file:
         # line number is the index of the token
         for idx in range(len(vocab_id_to_token)):
             file.write(vocab_id_to_token[idx] + "\n")
@@ -121,7 +121,7 @@ def load_glove_embeddings(embeddings_txt_file: str,
 
     embeddings = {}
     print("\nReading pretrained embedding file.")
-    with open(embeddings_txt_file) as file:
+    with open(embeddings_txt_file, encoding='utf8') as file:
         for line in tqdm(file):
             line = str(line).strip()
             token = line.split(' ', 1)[0]

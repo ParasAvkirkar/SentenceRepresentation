@@ -78,6 +78,9 @@ class DanSequenceToVector(SequenceToVector):
         super(DanSequenceToVector, self).__init__(input_dim)
         # TODO(students): start
         # ...
+        self.dense_layers_list = []
+        for i in range(num_layers):
+            self.dense_layers_list.append(tf.keras.layers.Dense(input_dim, activation='relu'))
 
 
         # TODO(students): end
@@ -88,8 +91,40 @@ class DanSequenceToVector(SequenceToVector):
              training=False) -> tf.Tensor:
         # TODO(students): start
         # ...
+
+        batch_size = vector_sequence.shape[0]
+        max_token_size = vector_sequence.shape[1]
+        final_mask = sequence_mask
+        if training:
+            drop_out_mask = tf.random.uniform([batch_size, max_token_size])
+            drop_out_mask = tf.where(drop_out_mask < 0.2, 0.0, 1.0)
+            final_mask = tf.multiply(drop_out_mask, sequence_mask)
+
+        # print(str(sequence_mask.shape))
+        # print("final mask shape " + str(final_mask.shape))
+
+        filtered_vector_sequence = tf.multiply(vector_sequence, tf.reshape(final_mask, [batch_size, max_token_size, 1]))
+        # print("filtered vec seq " + str(filtered_vector_sequence.shape))
+        vectors_considered = tf.reshape(tf.reduce_sum(final_mask, axis=1), [batch_size, 1])
+
+        combined_vector = tf.reduce_sum(filtered_vector_sequence, 1)
+        # num_words = vector_sequence.shape[1]
+        combined_vector = tf.divide(combined_vector, vectors_considered * 1.0)
+
+        # print(str("combined vector shape ") + str(combined_vector.shape))
+
+        layer_representations = None
+        prev_output = combined_vector
+        for i in range(len(self.dense_layers_list)):
+            representation = self.dense_layers_list[i](prev_output)
+            prev_output = representation
+            if i == 0:
+                layer_representations = representation
+            else:
+                layer_representations = tf.concat([layer_representations, representation], 0)
+
         # TODO(students): end
-        return {"combined_vector": combined_vector,
+        return {"combined_vector": prev_output,
                 "layer_representations": layer_representations}
 
 

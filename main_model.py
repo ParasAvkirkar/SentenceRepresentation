@@ -9,7 +9,6 @@ from tensorflow.keras import layers, models
 # project imports
 from sequence_to_vector import DanSequenceToVector, GruSequenceToVector
 
-
 class MainClassifier(models.Model):
     def __init__(self,
                  seq2vec_choice: str,
