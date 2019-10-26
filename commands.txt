@@ -35,3 +35,7 @@ python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_d
 python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_gru_5k_with_emb --layer-num 2 --num-epochs 4 --suffix-name _sentiment_gru_with_emb_on_5k_at_layer_2
 python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_gru_5k_with_emb --layer-num 3 --num-epochs 4 --suffix-name _sentiment_gru_with_emb_on_5k_at_layer_3
 python train.py probing data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --base-model-dir serialization_dirs/main_gru_5k_with_emb --layer-num 4 --num-epochs 4 --suffix-name _sentiment_gru_with_emb_on_5k_at_layer_4
+
+
+train_dan_for_long
+python train.py main data/imdb_sentiment_train_5k.jsonl data/imdb_sentiment_dev.jsonl --seq2vec-choice dan --embedding-dim 50 --num-layers 4 --num-epochs 50 --suffix-name _dan_5k_with_emb_for_50k --pretrained-embedding-file data/glove.6B.50d.txt

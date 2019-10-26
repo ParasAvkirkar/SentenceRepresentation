@@ -96,10 +96,10 @@ class DanSequenceToVector(SequenceToVector):
         batch_size = vector_sequence.shape[0]
         max_token_size = vector_sequence.shape[1]
         final_mask = sequence_mask
-        # if training:
-        #     drop_out_mask = tf.random.uniform([batch_size, max_token_size])
-        #     drop_out_mask = tf.where(drop_out_mask < 0.2, 0.0, 1.0)
-        #     final_mask = tf.multiply(drop_out_mask, sequence_mask)
+        if training:
+            drop_out_mask = tf.random.uniform([batch_size, max_token_size])
+            drop_out_mask = tf.where(drop_out_mask < 0.2, 0.0, 1.0)
+            final_mask = tf.multiply(drop_out_mask, sequence_mask)
 
         # print(str(sequence_mask.shape))
         # print("final mask shape " + str(final_mask.shape))
@@ -110,7 +110,7 @@ class DanSequenceToVector(SequenceToVector):
 
         combined_vector = tf.reduce_sum(filtered_vector_sequence, 1)
         # num_words = vector_sequence.shape[1]
-        combined_vector = tf.divide(combined_vector, vectors_considered * 1.0)
+        combined_vector = tf.math.divide_no_nan(combined_vector, vectors_considered * 1.0)
 
         # print(str("combined vector shape ") + str(combined_vector.shape))
 
