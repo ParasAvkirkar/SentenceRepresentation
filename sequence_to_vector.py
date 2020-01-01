@@ -79,6 +79,8 @@ class DanSequenceToVector(SequenceToVector):
         super(DanSequenceToVector, self).__init__(input_dim)
         # TODO(students): start
         # ...
+        # My implementation
+
         self.dense_layers_list = []
         for i in range(num_layers):
             self.dense_layers_list.append(tf.keras.layers.Dense(input_dim, activation='relu'))
@@ -92,7 +94,7 @@ class DanSequenceToVector(SequenceToVector):
              training=False) -> tf.Tensor:
         # TODO(students): start
         # ...
-
+        # My implementation
         batch_size = vector_sequence.shape[0]
         max_token_size = vector_sequence.shape[1]
         final_mask = sequence_mask
@@ -101,18 +103,14 @@ class DanSequenceToVector(SequenceToVector):
             drop_out_mask = tf.where(drop_out_mask < 0.2, 0.0, 1.0)
             final_mask = tf.multiply(drop_out_mask, sequence_mask)
 
-        # print(str(sequence_mask.shape))
-        # print("final mask shape " + str(final_mask.shape))
 
         filtered_vector_sequence = tf.multiply(vector_sequence, tf.reshape(final_mask, [batch_size, max_token_size, 1]))
-        # print("filtered vec seq " + str(filtered_vector_sequence.shape))
         vectors_considered = tf.reshape(tf.reduce_sum(final_mask, axis=1), [batch_size, 1])
 
         combined_vector = tf.reduce_sum(filtered_vector_sequence, 1)
-        # num_words = vector_sequence.shape[1]
+        # To handle NAN cases of loss calculation on logits
         combined_vector = tf.math.divide_no_nan(combined_vector, vectors_considered * 1.0)
 
-        # print(str("combined vector shape ") + str(combined_vector.shape))
 
         layer_representations = []
         prev_output = combined_vector
@@ -158,17 +156,15 @@ class GruSequenceToVector(SequenceToVector):
              training=False) -> tf.Tensor:
         # TODO(students): start
         # ...
-
+        # My implementation
         batch_size = vector_sequence.shape[0]
         max_token_size = vector_sequence.shape[1]
 
         prev_output = vector_sequence
         layer_representations = []
-        # print("vector_seq " + str(prev_output.shape))
         for i in range(len(self.gru_encoders)):
             prev_output, last_state = self.gru_encoders[i](prev_output, mask=sequence_mask)
             layer_representations.append(last_state)
-            # print("prev_output " + str(prev_output.shape) + " last state " + str(last_state.shape))
 
         # TODO(students): end
         return {"combined_vector": last_state,

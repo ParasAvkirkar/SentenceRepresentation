@@ -78,21 +78,28 @@ if __name__ == '__main__':
 
     for seq2vec_name, representations in layer_representations.items():
         representations = np.asarray(representations)
-        differences_across_layers = {"worst": [], "okay": [], "cool": []}
+        first_word = 'worst'
+        second_word = 'okay'
+        third_word = 'cool'
+
+        # first_word = 'happy'
+        # second_word = 'jolly'
+        # third_word = 'smirk'
+        differences_across_layers = {first_word: [], second_word: [], third_word: []}
         for layer_num in choices[seq2vec_name]:
             original_representation = representations[0, layer_num-1, :]
             updated_representations = representations[1:, layer_num-1,:]
             differences = [sum(np.abs(original_representation-updated_representation))
                            for updated_representation in updated_representations]
-            differences_across_layers["worst"].append(float(differences[0]))
-            differences_across_layers["okay"].append(float(differences[1]))
-            differences_across_layers["cool"].append(float(differences[2]))
+            differences_across_layers[first_word].append(float(differences[0]))
+            differences_across_layers[second_word].append(float(differences[1]))
+            differences_across_layers[third_word].append(float(differences[2]))
 
         # Make the plots
         plt.style.use('seaborn-whitegrid')
-        plt.plot(choices[seq2vec_name], differences_across_layers["worst"], label="worst")
-        plt.plot(choices[seq2vec_name], differences_across_layers["okay"], label="okay")
-        plt.plot(choices[seq2vec_name], differences_across_layers["cool"], label="cool")
+        plt.plot(choices[seq2vec_name], differences_across_layers[first_word], label=first_word)
+        plt.plot(choices[seq2vec_name], differences_across_layers[second_word], label=second_word)
+        plt.plot(choices[seq2vec_name], differences_across_layers[third_word], label=third_word)
         plt.xlabel("Layer")
         plt.ylabel("Perturbation Response")
         plt.legend()
