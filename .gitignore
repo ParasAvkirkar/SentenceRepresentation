@@ -138,3 +138,7 @@ dmypy.json
 # project specific
 archive
 serialization_dirs
+
+hw2_112685014_avkirkar_paras/
+*.tmp
+*.zip

@@ -34,7 +34,7 @@ class ProbingClassifier(models.Model):
 
         # TODO(students): start
         # ...
-
+        # My implementation
         self.dense_layer = layers.Dense(classes_num)
 
         # TODO(students): end
@@ -57,10 +57,10 @@ class ProbingClassifier(models.Model):
         """
         # TODO(students): start
         # ...
+        # My implementation
+
         layer_representations = self._pretrained_model(inputs)['layer_representations']
         layer_representation = layer_representations[:, self._layer_num-1, :]
-        # print("shape " + str(layer_representations.shape))
-        # self.dense_layer()
 
         # TODO(students): end
         return {"logits": self.dense_layer(layer_representation)}
